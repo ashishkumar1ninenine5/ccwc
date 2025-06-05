@@ -40,3 +40,26 @@ button.button.is-danger {
 button.button.is-danger:hover {
   background-color: #ff3860;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+button.button {
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button.button:hover {
+  transform: scale(1.05);
+}
