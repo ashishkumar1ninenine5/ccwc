@@ -11,8 +11,12 @@ DB_PATH = "todo.db"
 def init_db():
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute(
-            "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, completed INTEGER DEFAULT 0)"
+            "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, completed INTEGER DEFAULT 0, due_date TEXT)"
         )
+        # ensure due_date column exists for older databases
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(tasks)").fetchall()]
+        if "due_date" not in cols:
+            conn.execute("ALTER TABLE tasks ADD COLUMN due_date TEXT")
 
 
 init_db()
@@ -22,6 +26,7 @@ class Task(BaseModel):
     id: int | None = None
     title: str
     completed: bool = False
+    due_date: str | None = None
 
 
 @app.get("/health")
@@ -45,10 +50,17 @@ def index_js() -> FileResponse:
 
 
 @app.get("/tasks")
-def list_tasks():
+def list_tasks(status: str | None = None):
+    """List tasks filtered by status."""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
-        rows = conn.execute("SELECT id, title, completed FROM tasks").fetchall()
+        query = "SELECT id, title, completed, due_date FROM tasks"
+        if status == "active":
+            query += " WHERE completed=0"
+        elif status == "completed":
+            query += " WHERE completed=1"
+        query += " ORDER BY COALESCE(due_date, '')"
+        rows = conn.execute(query).fetchall()
         return [dict(row) for row in rows]
 
 
@@ -56,8 +68,8 @@ def list_tasks():
 def create_task(task: Task):
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.execute(
-            "INSERT INTO tasks (title, completed) VALUES (?, ?)",
-            (task.title, int(task.completed)),
+            "INSERT INTO tasks (title, completed, due_date) VALUES (?, ?, ?)",
+            (task.title, int(task.completed), task.due_date),
         )
         conn.commit()
         task.id = cur.lastrowid
@@ -68,8 +80,8 @@ def create_task(task: Task):
 def update_task(task_id: int, task: Task):
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.execute(
-            "UPDATE tasks SET title=?, completed=? WHERE id=?",
-            (task.title, int(task.completed), task_id),
+            "UPDATE tasks SET title=?, completed=?, due_date=? WHERE id=?",
+            (task.title, int(task.completed), task.due_date, task_id),
         )
         conn.commit()
         if cur.rowcount == 0:

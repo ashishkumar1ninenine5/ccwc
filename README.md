@@ -1,9 +1,13 @@
 # Todo List Application
 
-This repository contains a simple Todo list web application built with the following stack:
+This repository contains a Todo list web application built with the following stack:
 
 - **Backend:** [FastAPI](https://fastapi.tiangolo.com/) (Python) with SQLite database
 - **Frontend:** [React](https://react.dev/) served as static files
+
+The app allows you to create tasks with optional due dates and filter them by
+status (all, active or completed). The UI uses the Bulma CSS framework for a
+cleaner appearance.
 
 ## Project Structure
 
@@ -11,7 +15,7 @@ This repository contains a simple Todo list web application built with the follo
 backend/       # FastAPI application
   main.py      # API endpoints and SQLite setup
   requirements.txt
-frontend/      # Minimal React front‑end
+frontend/      # React front‑end served as static files
   index.html
   index.js
 README.md      # Project documentation
@@ -36,7 +40,9 @@ uvicorn backend.main:app --reload
 
 The API will be available at `http://127.0.0.1:8000`.
 
-3. Open `frontend/index.html` in your browser to use the React interface.
+3. Open `frontend/index.html` in your browser to use the React interface. The
+   page lets you add tasks with due dates and filter the list using the tabs at
+   the top.
 
 ## Database
 
