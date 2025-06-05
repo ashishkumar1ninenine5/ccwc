@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import os
 import sqlite3
 
 app = FastAPI()
@@ -20,6 +22,19 @@ class Task(BaseModel):
     id: int | None = None
     title: str
     completed: bool = False
+
+
+@app.get("/health")
+def health() -> dict:
+    """Simple health check endpoint."""
+    return {"status": "ok"}
+
+
+@app.get("/")
+def index() -> FileResponse:
+    """Serve the React front-end."""
+    index_path = os.path.join("frontend", "index.html")
+    return FileResponse(index_path)
 
 
 @app.get("/tasks")
