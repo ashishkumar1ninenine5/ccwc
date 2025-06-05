@@ -37,6 +37,13 @@ def index() -> FileResponse:
     return FileResponse(index_path)
 
 
+@app.get("/index.js")
+def index_js() -> FileResponse:
+    """Serve the bundled React application."""
+    js_path = os.path.join("frontend", "index.js")
+    return FileResponse(js_path)
+
+
 @app.get("/tasks")
 def list_tasks():
     with sqlite3.connect(DB_PATH) as conn:

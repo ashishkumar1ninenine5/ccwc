@@ -47,11 +47,12 @@ function App() {
         <input value={title} onChange={e => setTitle(e.target.value)} placeholder="New task" />
         <button type="submit">Add</button>
       </form>
-      <ul>
+      <p>{tasks.filter(t => !t.completed).length} of {tasks.length} remaining</p>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
         {tasks.map(task => (
-          <li key={task.id}>
+          <li key={task.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
             <input type="checkbox" checked={task.completed} onChange={() => toggleTask(task.id, !task.completed)} />
-            {task.title}
+            <span style={{ flex: 1, marginLeft: '0.5rem', textDecoration: task.completed ? 'line-through' : 'none' }}>{task.title}</span>
             <button onClick={() => deleteTask(task.id)}>Delete</button>
           </li>
         ))}
