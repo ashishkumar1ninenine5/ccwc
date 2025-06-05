@@ -69,9 +69,9 @@ function App() {
       <p>{tasks.filter(t => !t.completed).length} of {tasks.length} remaining</p>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {tasks.map(task => (
-          <li key={task.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <li key={task.id} className={task.completed ? 'completed' : ''} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
             <input type="checkbox" checked={task.completed} onChange={() => toggleTask(task.id, !task.completed)} />
-            <span style={{ flex: 1, marginLeft: '0.5rem', textDecoration: task.completed ? 'line-through' : 'none' }}>
+            <span style={{ flex: 1, marginLeft: '0.5rem' }}>
               {task.title}
               {task.due_date && (
                 <small style={{ marginLeft: '0.5rem' }}>(due {task.due_date})</small>
