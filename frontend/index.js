@@ -21,7 +21,8 @@ function App() {
     });
     setTitle('');
     setDueDate('');
-    loadTasks();
+    // show newly added task by switching back to the "all" tab
+    setFilter('all');
   }
 
   async function toggleTask(id, completed) {

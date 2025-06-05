@@ -49,6 +49,13 @@ def index_js() -> FileResponse:
     return FileResponse(js_path)
 
 
+@app.get("/styles.css")
+def styles_css() -> FileResponse:
+    """Serve the Bulma-based stylesheet."""
+    css_path = os.path.join("frontend", "styles.css")
+    return FileResponse(css_path)
+
+
 @app.get("/tasks")
 def list_tasks(status: str | None = None):
     """List tasks filtered by status."""
