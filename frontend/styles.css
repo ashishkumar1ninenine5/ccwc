@@ -1,0 +1,42 @@
+body {
+  background: linear-gradient(120deg, #f6d365, #fda085);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  transition: background 0.5s ease-in-out;
+}
+
+.box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.box:hover {
+  transform: translateY(-3px);
+}
+
+li {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+li.completed {
+  color: #999;
+}
+
+li.completed span {
+  text-decoration: line-through;
+}
+
+li:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+
+button.button.is-danger {
+  transition: background-color 0.3s;
+}
+
+button.button.is-danger:hover {
+  background-color: #ff3860;
+}
